@@ -52,6 +52,18 @@ func (cfg *apiConfig) handerUserCreate(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (cfg apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
+
+	userResp, err := databaseUserToUser(user)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Couldn't convert user", err)
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, userResp)
+
+}
+
 func generateRandomSHA256Hash() (string, error) {
 	randomBytes := make([]byte, 32)
 	_, err := rand.Read(randomBytes)
